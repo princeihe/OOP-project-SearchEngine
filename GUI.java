@@ -129,6 +129,7 @@ public class GUI extends JFrame {
 		p2.add(studies_business);
 		p2.add(submit);
 
+		// hello
 	}
 }
 
