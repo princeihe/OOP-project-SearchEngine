@@ -1,145 +1,159 @@
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import java.util.*;
+import java.awt.event.*;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.List;
 
-public class GUI extends JFrame {
+public class GUI extends JFrame{
 
 	public GUI() {
-		JFrame f1 = new JFrame("Machine Learning GUI");
+		// create a new JFrame
+		JFrame f1 = new JFrame("Search Engine");
 		JPanel p1 = new JPanel();
-		JPanel p2 = new JPanel();
-		JLabel l1 = new JLabel("Welcome to my Machine Learning GUI");
-		JLabel genderLabel = new JLabel("Gender:");
-		JLabel parentBusinessLabel = new JLabel("Parent owns a business:");
-		JLabel partTimeJobLabel = new JLabel("Student has a part-time job:");
-		JLabel urbanOrRuralLabel = new JLabel("Student has a rural or urban address:");
-		JLabel studiesBusinessLabel = new JLabel("Student studies a business subject:");
-		JButton submit = new JButton("Submit data");
+		JTextArea fileContents = new JTextArea(20, 40);
+		JTextField searchTextField = new JTextField(20);
+		JButton searchButton = new JButton("Search");
 
-		// text fields to receive user input
-		JTextField gender = new JTextField();
-		JTextField parent_business = new JTextField();
-		JTextField part_time_job = new JTextField();
-		JTextField urban_or_rural = new JTextField();
-		JTextField studies_business = new JTextField();
+		p1.add(new JLabel("Search Term:"));
+		p1.add(searchTextField);
+		p1.add(searchButton);
+		p1.add(new JScrollPane(fileContents));
 
-		studies_business.setPreferredSize(new Dimension(150, 30));
-		gender.setPreferredSize(new Dimension(150, 30));
-		parent_business.setPreferredSize(new Dimension(150, 30));
-		part_time_job.setPreferredSize(new Dimension(150, 30));
-		urban_or_rural.setPreferredSize(new Dimension(150, 30));
-		submit.setPreferredSize(new Dimension(150, 20));
-
+		// add the panel to the JFrame and show the window
+		f1.add(p1);
 		f1.setLayout(new GridLayout(2, 3));
-
+		f1.pack();
+		f1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f1.setVisible(true);
 		f1.setSize(500, 500);
 
-		f1.setLayout(new GridLayout(2, 3));
-		f1.add(p1);
-		f1.add(p2);
 
-		p2.add(genderLabel);
-		p2.add(gender);
-		p2.add(parentBusinessLabel);
-		p2.add(parent_business);
-		p2.add(partTimeJobLabel);
-		p2.add(part_time_job);
-		p2.add(urbanOrRuralLabel);
-		p2.add(urban_or_rural);
-		p2.add(studiesBusinessLabel);
-		p2.add(studies_business);
-		p2.setBackground(Color.white);
-		p2.add(submit);
+		// create a new JFileChooser for selecting the search space
 
-		gender.addFocusListener(new FocusListener() {
-			public void focusGained(FocusEvent e) {
-				gender.setText("");
-			}
-
-			public void focusLost(FocusEvent e) {
-				if (gender.getText().equals("")) {
-					gender.setText("Male or Female?");
-				}
-			}
-		});
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setMultiSelectionEnabled(true);
+		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fileChooser.setCurrentDirectory(new File("humpty.txt"));
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt");
+		fileChooser.setFileFilter(filter);
 
 
-		parent_business.addFocusListener(new FocusListener() {
-
-			public void focusGained(FocusEvent e) {
-				parent_business.setText("");
-			}
-
-			public void focusLost(FocusEvent e) {
-				if (parent_business.getText().equals("")) {
-					parent_business.setText("Yes or No?");
-				}
-			}
-		});
-
-
-		part_time_job.addFocusListener(new FocusListener() {
-
-			public void focusGained(FocusEvent e) {
-				part_time_job.setText("");
-			}
-
-			public void focusLost(FocusEvent e) {
-				if (part_time_job.getText().equals("")) {
-					part_time_job.setText("Yes or No?");
-				}
-			}
-		});
-
-
-		urban_or_rural.addFocusListener(new FocusListener() {
-			public void focusGained(FocusEvent e) {
-				urban_or_rural.setText("");
-			}
-
-			public void focusLost(FocusEvent e) {
-				if (urban_or_rural.getText().equals("")) {
-					urban_or_rural.setText("Urban or Rural?");
-				}
-			}
-		});
-
-
-		studies_business.addFocusListener(new FocusListener() {
-			public void focusGained(FocusEvent e) {
-				studies_business.setText("");
-			}
-
-			public void focusLost(FocusEvent e) {
-				if (studies_business.getText().equals("")) {
-					studies_business.setText("Yes or No?");
-				}
-			}
-		});
-
-		submit.addActionListener(new ActionListener() {
+		// add an ActionListener to the search button
+		searchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String genderInput = gender.getText();
-				String parentBusinessInput = parent_business.getText();
-				String partTimeJobInput = part_time_job.getText();
-				String urbanOrRuralInput = urban_or_rural.getText();
-				String studiesBusinessInput = studies_business.getText();
+				// get the search term from the text field
+				String searchTerm = searchTextField.getText();
 
-				System.out.println("Gender: " + genderInput);
-				System.out.println("Parent owns a business: " + parentBusinessInput);
-				System.out.println("Student has a part-time job: " + partTimeJobInput);
-				System.out.println("Student has a rural or urban address: " + urbanOrRuralInput);
-				System.out.println("Student studies a business subject: " + studiesBusinessInput);
+				// get the selected folder from the file chooser
+				java.io.File[] selectedFiles = fileChooser.getSelectedFiles();
+
+				// create a list to hold the matches
+				List<FileMatch> matches = new ArrayList<>();
+
+				// get a list of all the text files in the selected folder
+				for (File selectedFile : selectedFiles) {
+					if (selectedFile.isDirectory()) {
+						File[] files = selectedFile.listFiles(new FilenameFilter() {
+							public boolean accept(File dir, String name) {
+								return name.toLowerCase().endsWith(".txt");
+							}
+						});
+
+						// iterate through the list of files in the directory and search for the search term
+						for (File file : files) {
+							try {
+								// read the contents of the file into a String
+								String fileContent = new String(Files.readAllBytes(file.toPath()));
+								// check if the file contains the search term
+								if (fileContent.contains(searchTerm)) {
+									// calculate the strength of the match
+									int strength = calculateMatchStrength(fileContent, searchTerm);
+									// add the match to the list
+									matches.add(new FileMatch(file, strength));
+								}
+							} catch (IOException ex) {
+								ex.printStackTrace();
+							}
+						}
+					} else {
+						try {
+							// read the contents of the file into a String
+							String fileContent = new String(Files.readAllBytes(selectedFile.toPath()));
+							// check if the file contains the search term
+							if (fileContent.contains(searchTerm)) {
+								// calculate the strength of the match
+								int strength = calculateMatchStrength(fileContent, searchTerm);
+								// add the match to the list
+								matches.add(new FileMatch(selectedFile, strength));
+							}
+						} catch (IOException ex) {
+							ex.printStackTrace();
+						}
+					}
+				}
+
+
+				// sort the matches based on the strength of the match
+				Collections.sort(matches, new Comparator<FileMatch>() {
+					public int compare(FileMatch fm1, FileMatch fm2) {
+						return Integer.compare(fm2.getStrength(), fm1.getStrength());
+					}
+				});
+
+				// display the matches in the JTextArea
+				for (FileMatch match : matches) {
+					try {
+						// read the contents of the file into a String
+						String fileContent = new String(Files.readAllBytes(match.getFile().toPath()));
+						// display the contents of the file in the JTextArea
+						fileContents.append(match.getFile().getName() + " (Match Strength: " + match.getStrength() + "):\n" + fileContent + "\n");
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+				}
 			}
 		});
 	}
-}
+
+
+
+
+
+	private void performSearch(String searchTerm, java.io.File[] selectedFiles) {
+
+	}
+
+	// helper method to calculate the strength of the match
+	private int calculateMatchStrength(String fileContent, String searchTerm) {
+		// implement your own algorithm to calculate the strength of the match
+		// for example, you could count the number of occurrences of the search term
+		// and divide by the length of the file
+		System.out.println("Hello");
+		return 0;
+	}
+
+		// inner class to hold a file match and its strength
+		private class FileMatch {
+			private File file;
+			private int strength;
+
+			public FileMatch(File file, int strength) {
+				this.file = file;
+				this.strength = strength;
+			}
+
+			public File getFile() {
+				return file;
+			}
+
+			public int getStrength() {
+				return strength;
+			}
+		}
+	}
 
