@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.io.File;
 import java.awt.event.*;
+import java.util.List;
 
 public class GUI extends JFrame {
 
@@ -43,7 +44,7 @@ public class GUI extends JFrame {
 				}
 				scanner.close();
 				double percentage = ((double) count / getTotalWordsInFile(file)) * 100;
-				fileContents.append("The word \"" + searchTextField.getText() + "\" appears in " + file.getName() + ": " + percentage + "%\n");
+				fileContents.append("");
 			}
 		}
 
@@ -52,15 +53,24 @@ public class GUI extends JFrame {
 				String searchTerm = searchTextField.getText();
 				File directory = new File("files");
 				File[] files = directory.listFiles();
-				fileContents.setText("");
+				List<String[]> results = new ArrayList<>();
 				for (File file : files) {
 					try {
 						double percentage = getPercentage(file.getAbsolutePath(), searchTerm);
-						String result = file.getName() + ": " + String.format("%.2f%%", percentage) + "\n";
-						fileContents.append(result);
+						String[] result = new String[]{file.getName(), String.format("%.2f%%", percentage)};
+						results.add(result);
 					} catch (FileNotFoundException ex) {
 						ex.printStackTrace();
 					}
+				}
+				Collections.sort(results, new Comparator<String[]>() {
+					public int compare(String[] a, String[] b) {
+						return Double.compare(Double.parseDouble(b[1].replace("%", "")), Double.parseDouble(a[1].replace("%", "")));
+					}
+				});
+				fileContents.setText("");
+				for (String[] result : results) {
+					fileContents.append(result[0] + ": " + result[1] + "\n");
 				}
 			}
 		});
