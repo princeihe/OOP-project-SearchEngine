@@ -3,6 +3,7 @@ import java.awt.*;
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.io.File;
+import java.awt.event.*;
 
 public class GUI extends JFrame {
 
@@ -45,6 +46,24 @@ public class GUI extends JFrame {
 				fileContents.append("The word \"" + searchTextField.getText() + "\" appears in " + file.getName() + ": " + percentage + "%\n");
 			}
 		}
+
+		searchButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String searchTerm = searchTextField.getText();
+				File directory = new File("files");
+				File[] files = directory.listFiles();
+				fileContents.setText("");
+				for (File file : files) {
+					try {
+						double percentage = getPercentage(file.getAbsolutePath(), searchTerm);
+						String result = file.getName() + ": " + String.format("%.2f%%", percentage) + "\n";
+						fileContents.append(result);
+					} catch (FileNotFoundException ex) {
+						ex.printStackTrace();
+					}
+				}
+			}
+		});
 	}
 
 	private int getTotalWordsInFile(File file) throws FileNotFoundException {
@@ -57,7 +76,20 @@ public class GUI extends JFrame {
 		scanner.close();
 		return count;
 	}
+
+	private double getPercentage(String filePath, String searchTerm) throws FileNotFoundException {
+		File file = new File(filePath);
+		Scanner scanner = new Scanner(file);
+		int totalWords = 0;
+		int matchingWords = 0;
+		while (scanner.hasNext()) {
+			totalWords++;
+			if (scanner.next().equalsIgnoreCase(searchTerm)) {
+				matchingWords++;
+			}
+		}
+		scanner.close();
+		return ((double) matchingWords / totalWords) * 100;
+	}
+
 }
-
-
-
