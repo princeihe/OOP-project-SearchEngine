@@ -101,5 +101,4 @@ public class GUI extends JFrame {
 		scanner.close();
 		return ((double) matchingWords / totalWords) * 100;
 	}
-
 }
