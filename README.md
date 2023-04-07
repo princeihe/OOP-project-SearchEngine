@@ -43,5 +43,6 @@ The GUI class also contains two action listeners: one for the "Choose File and S
 
 The "Search" button listener searches for the specified term within the text files included in the project. The program calculates the percentage of words in each file that contain the term and displays the results in the text area, sorted by percentage in descending order.
 
+Things I would add if I had more time: I would include spell checking and improve the GUI layout to improve user experience.
 Acknowledgments:
 This search engine application was created by Prince Ihekwereme as a Java programming assignment. It uses the Java Swing GUI toolkit and the Apache Commons IO library.
