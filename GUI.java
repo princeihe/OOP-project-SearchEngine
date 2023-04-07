@@ -15,10 +15,12 @@ public class GUI extends JFrame {
 		JTextArea fileContents = new JTextArea(20, 40);
 		JTextField searchTextField = new JTextField(20);
 		JButton searchButton = new JButton("Search");
+		JButton chooseFileButton = new JButton("Choose File and Search");
 
 		p1.add(new JLabel("Search Term:"));
 		p1.add(searchTextField);
 		p1.add(searchButton);
+		p1.add(chooseFileButton);
 		p1.add(new JScrollPane(fileContents));
 
 		// add the panel to the JFrame and show the window
@@ -30,23 +32,32 @@ public class GUI extends JFrame {
 		f1.setSize(500, 500);
 
 		// read the files and search for the word
-		File folder = new File("files");
-		File[] listOfFiles = folder.listFiles();
-		for (File file : listOfFiles) {
-			if (file.isFile()) {
-				Scanner scanner = new Scanner(file);
-				int count = 0;
-				while (scanner.hasNextLine()) {
-					String line = scanner.nextLine();
-					if (line.contains(searchTextField.getText())) {
-						count++;
+		chooseFileButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fileChooser = new JFileChooser();
+				int returnValue = fileChooser.showOpenDialog(null);
+				if (returnValue == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fileChooser.getSelectedFile();
+					try {
+						fileContents.setText("");
+						Scanner scanner = new Scanner(selectedFile);
+						int count = 0;
+						while (scanner.hasNextLine()) {
+							String line = scanner.nextLine();
+							if (line.contains(searchTextField.getText())) {
+								count++;
+							}
+						}
+						scanner.close();
+						double percentage = ((double) count / getTotalWordsInFile(selectedFile)) * 100;
+						fileContents.append("Selected file: " + selectedFile.getName() + "\n");
+						fileContents.append(String.format("Percentage of words containing the word '%s': %.2f%%", searchTextField.getText(), percentage));
+					} catch (FileNotFoundException ex) {
+						ex.printStackTrace();
 					}
 				}
-				scanner.close();
-				double percentage = ((double) count / getTotalWordsInFile(file)) * 100;
-				fileContents.append("");
 			}
-		}
+		});
 
 		searchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -75,6 +86,7 @@ public class GUI extends JFrame {
 			}
 		});
 	}
+
 
 	private int getTotalWordsInFile(File file) throws FileNotFoundException {
 		Scanner scanner = new Scanner(file);
