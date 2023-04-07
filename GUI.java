@@ -12,7 +12,7 @@ public class GUI extends JFrame {
 
 	public GUI() throws FileNotFoundException {
 		// GUI Components
-		JFrame f1 = new JFrame("My search Engine");
+		JFrame f1 = new JFrame("Prince's Search Engine");
 		JPanel p1 = new JPanel();
 		JTextArea fileContents = new JTextArea(20, 40);
 		JTextField searchTextField = new JTextField(20);
@@ -36,7 +36,7 @@ public class GUI extends JFrame {
 			}
 			public void menuDeselected(MenuEvent e) {}
 			public void menuCanceled(MenuEvent e) {}
-		});
+		}); // end about menu listener
 
 		help.addMenuListener(new MenuListener() {
 			public void menuSelected(MenuEvent e) {
@@ -44,7 +44,7 @@ public class GUI extends JFrame {
 			}
 			public void menuDeselected(MenuEvent e) {}
 			public void menuCanceled(MenuEvent e) {}
-		});
+		}); // end help menu listener
 
 		exit.addMenuListener(new MenuListener() {
 			public void menuSelected(MenuEvent e) {
@@ -55,10 +55,10 @@ public class GUI extends JFrame {
 			}
 			public void menuDeselected(MenuEvent e) {}
 			public void menuCanceled(MenuEvent e) {}
-		});
+		}); // end exit menu listener
 
+		// GUI components
 		f1.setJMenuBar(menuBar);
-
 		p1.add(new JLabel("Search Term:"));
 		p1.add(searchTextField);
 		p1.add(searchButton);
@@ -88,18 +88,18 @@ public class GUI extends JFrame {
 							String target = scanner.next();
 							if (target.equals(searchTextField.getText())) {
 								count++;
-							}
-						}
+							} // end if
+						} // end while
 						scanner.close();
 						double percentage = ((double) count / getTotalWordsInFile(selectedFile)) * 100;
 						fileContents.append("Selected file: " + selectedFile.getName() + "\n");
 						fileContents.append(String.format("Percentage of words containing the word '%s': %.2f%%", searchTextField.getText(), percentage));
 					} catch (FileNotFoundException ex) {
 						ex.printStackTrace();
-					}
+					} // end catch
 				}
 			}
-		});
+		}); // end chooseFileButton action listener
 
 		searchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -109,12 +109,13 @@ public class GUI extends JFrame {
 				List<String[]> results = new ArrayList<>();
 				for (File file : files) {
 					try {
+						// calling getPercentage function from PercentageCalculator Class to get percentage
 						double percentage = PercentageCalculator.getPercentage(file.getAbsolutePath(), searchTerms);
 						String[] result = new String[]{file.getName(), String.format("%.2f%%", percentage)};
 						results.add(result);
 					} catch (FileNotFoundException ex) {
 						ex.printStackTrace();
-					}
+					} // end catch
 				}
 				Collections.sort(results, new Comparator<String[]>() {
 					public int compare(String[] a, String[] b) {
@@ -126,7 +127,7 @@ public class GUI extends JFrame {
 					fileContents.append(result[0] + ": " + result[1] + "\n");
 				}
 			}
-		});
+		}); // end searchButton action listener
 	}
 
 	private int getTotalWordsInFile(File file) throws FileNotFoundException {
@@ -135,8 +136,8 @@ public class GUI extends JFrame {
 		while (scanner.hasNext()) {
 			scanner.next();
 			count++;
-		}
+		} // end while
 		scanner.close();
 		return count;
-	}
-}
+	} // end getTotalWordsInFile
+} // end GUI class

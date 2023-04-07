@@ -8,5 +8,5 @@ public class control {
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException(e);
 		}
-	}
-}
+	} // end main
+} // end control

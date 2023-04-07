@@ -16,10 +16,10 @@ public class PercentageCalculator {
                 if (word.toLowerCase().contains(searchTerm.toLowerCase())) {
                     matchingWords++;
                     break;
-                }
-            }
-        }
+                } // end if
+            } // end for
+        } // end while
         scanner.close();
         return ((double) matchingWords / totalWords) * 100;
-    }
-}
+    } // end getPercentage
+} // end PercentageCalculator
