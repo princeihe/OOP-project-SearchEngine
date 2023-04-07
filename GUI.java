@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import java.awt.*;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -16,6 +18,48 @@ public class GUI extends JFrame {
 		JTextField searchTextField = new JTextField(20);
 		JButton searchButton = new JButton("Search");
 		JButton chooseFileButton = new JButton("Choose File and Search");
+
+		// Create the menu bar
+		JMenuBar menuBar = new JMenuBar();
+
+		// Create the File menu
+		JMenu about = new JMenu("About");
+		JMenu help = new JMenu("Help");
+		JMenu exit = new JMenu("Exit");
+
+		menuBar.add(about);
+		menuBar.add(help);
+		menuBar.add(exit);
+
+
+		about.addMenuListener(new MenuListener() {
+			public void menuSelected(MenuEvent e) {
+				JOptionPane.showMessageDialog(null, "This is a search engine application created by Prince Ihekwereme that allows you to search for words contained within text files in the project or within your local machine");
+			}
+			public void menuDeselected(MenuEvent e) {}
+			public void menuCanceled(MenuEvent e) {}
+		});
+
+		help.addMenuListener(new MenuListener() {
+			public void menuSelected(MenuEvent e) {
+				JOptionPane.showMessageDialog(null, "Type in a word or phrase then press search to search for that word or phrase within the text files included in the application, or press choose a file and search to search a text file on your local machine.");
+			}
+			public void menuDeselected(MenuEvent e) {}
+			public void menuCanceled(MenuEvent e) {}
+		});
+
+		exit.addMenuListener(new MenuListener() {
+			public void menuSelected(MenuEvent e) {
+				int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Exit Confirmation", JOptionPane.YES_NO_OPTION);
+				if (result == JOptionPane.YES_OPTION) {
+					System.exit(0);
+				}
+			}
+			public void menuDeselected(MenuEvent e) {}
+			public void menuCanceled(MenuEvent e) {}
+		});
+
+		f1.setJMenuBar(menuBar);
 
 		p1.add(new JLabel("Search Term:"));
 		p1.add(searchTextField);
