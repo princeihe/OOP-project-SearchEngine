@@ -50,13 +50,13 @@ public class GUI extends JFrame {
 
 		searchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String searchTerm = searchTextField.getText();
+				String[] searchTerms = searchTextField.getText().split("\\s+");
 				File directory = new File("files");
 				File[] files = directory.listFiles();
 				List<String[]> results = new ArrayList<>();
 				for (File file : files) {
 					try {
-						double percentage = getPercentage(file.getAbsolutePath(), searchTerm);
+						double percentage = getPercentage(file.getAbsolutePath(), searchTerms);
 						String[] result = new String[]{file.getName(), String.format("%.2f%%", percentage)};
 						results.add(result);
 					} catch (FileNotFoundException ex) {
@@ -87,18 +87,22 @@ public class GUI extends JFrame {
 		return count;
 	}
 
-	private double getPercentage(String filePath, String searchTerm) throws FileNotFoundException {
+	private double getPercentage(String filePath, String[] searchTerms) throws FileNotFoundException {
 		File file = new File(filePath);
 		Scanner scanner = new Scanner(file);
 		int totalWords = 0;
 		int matchingWords = 0;
 		while (scanner.hasNext()) {
 			totalWords++;
-			if (scanner.next().equalsIgnoreCase(searchTerm)) {
-				matchingWords++;
+			String word = scanner.next();
+			for (String searchTerm : searchTerms) {
+				if (word.equalsIgnoreCase(searchTerm)) {
+					matchingWords++;
+				}
 			}
 		}
 		scanner.close();
 		return ((double) matchingWords / totalWords) * 100;
 	}
+
 }
