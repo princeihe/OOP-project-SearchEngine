@@ -11,7 +11,7 @@ import java.util.List;
 public class GUI extends JFrame {
 
 	public GUI() throws FileNotFoundException {
-		// create a new JFrame
+		// GUI Components
 		JFrame f1 = new JFrame("My search Engine");
 		JPanel p1 = new JPanel();
 		JTextArea fileContents = new JTextArea(20, 40);
@@ -19,10 +19,8 @@ public class GUI extends JFrame {
 		JButton searchButton = new JButton("Search");
 		JButton chooseFileButton = new JButton("Choose File and Search");
 
-		// Create the menu bar
+		// Menu bar
 		JMenuBar menuBar = new JMenuBar();
-
-		// Create the File menu
 		JMenu about = new JMenu("About");
 		JMenu help = new JMenu("Help");
 		JMenu exit = new JMenu("Exit");
