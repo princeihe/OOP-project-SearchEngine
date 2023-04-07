@@ -85,8 +85,8 @@ public class GUI extends JFrame {
 						Scanner scanner = new Scanner(selectedFile);
 						int count = 0;
 						while (scanner.hasNextLine()) {
-							String line = scanner.nextLine();
-							if (line.contains(searchTextField.getText())) {
+							String target = scanner.next();
+							if (target.equals(searchTextField.getText())) {
 								count++;
 							}
 						}
@@ -109,7 +109,7 @@ public class GUI extends JFrame {
 				List<String[]> results = new ArrayList<>();
 				for (File file : files) {
 					try {
-						double percentage = getPercentage(file.getAbsolutePath(), searchTerms);
+						double percentage = PercentageCalculator.getPercentage(file.getAbsolutePath(), searchTerms);
 						String[] result = new String[]{file.getName(), String.format("%.2f%%", percentage)};
 						results.add(result);
 					} catch (FileNotFoundException ex) {
@@ -129,7 +129,6 @@ public class GUI extends JFrame {
 		});
 	}
 
-
 	private int getTotalWordsInFile(File file) throws FileNotFoundException {
 		Scanner scanner = new Scanner(file);
 		int count = 0;
@@ -140,23 +139,4 @@ public class GUI extends JFrame {
 		scanner.close();
 		return count;
 	}
-
-	private double getPercentage(String filePath, String[] searchTerms) throws FileNotFoundException {
-		File file = new File(filePath);
-		Scanner scanner = new Scanner(file);
-		int totalWords = 0;
-		int matchingWords = 0;
-		while (scanner.hasNext()) {
-			totalWords++;
-			String word = scanner.next();
-			for (String searchTerm : searchTerms) {
-				if (word.equalsIgnoreCase(searchTerm)) {
-					matchingWords++;
-				}
-			}
-		}
-		scanner.close();
-		return ((double) matchingWords / totalWords) * 100;
-	}
-
 }
